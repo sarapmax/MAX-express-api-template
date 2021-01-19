@@ -1,12 +1,14 @@
 import { users } from '../models'
+import { OK, CREATED, INTERNAL_SERVER_ERROR } from '../constants/http-status'
+import { RECORD_CREATED, RECORD_UPDATED, RECORD_DELETE } from '../constants/response-message'
 
 // Get all users
 exports.list = async (req, res) => {
   try {
     const userList = await users.findAll()
-    return res.status(200).json({ users: userList })
+    return res.status(OK).json({ users: userList })
   } catch (error) {
-    res.status(500).json({ message: error.message })
+    res.status(INTERNAL_SERVER_ERROR).json({ message: error.message })
   }
 }
 
@@ -18,9 +20,9 @@ exports.get = async (req, res) => {
       where: { id },
     })
 
-    return res.status(200).json({ user })
+    return res.status(OK).json({ user })
   } catch (error) {
-    res.status(500).json({ message: error.message })
+    res.status(INTERNAL_SERVER_ERROR).json({ message: error.message })
   }
 }
 
@@ -29,9 +31,9 @@ exports.create = async (req, res) => {
   try {
     const user = await users.create(req.body)
 
-    return res.status(201).json({ id: user.id, message: 'record has been saved successfilly.' })
+    return res.status(CREATED).json({ id: user.id, message: RECORD_CREATED })
   } catch (error) {
-    res.status(500).json({ message: error.message })
+    res.status(INTERNAL_SERVER_ERROR).json({ message: error.message })
   }
 }
 
@@ -40,9 +42,9 @@ exports.update = async (req, res) => {
     const { id } = req.params
     await users.update(req.body, { where: { id } })
 
-    return res.status(200).json({ message: 'record has been updated successfilly.' })
+    return res.status(OK).json({ message: RECORD_UPDATED })
   } catch (error) {
-    res.status(500).json({ message: error.message })
+    res.status(INTERNAL_SERVER_ERROR).json({ message: error.message })
   }
 }
 
@@ -51,8 +53,8 @@ exports.delete = async (req, res) => {
     const { id } = req.params
     await users.destroy({ where: { id } })
 
-    return res.status(200).json({ message: 'record has been deleted successfilly.' })
+    return res.status(OK).json({ message: RECORD_DELETE })
   } catch (error) {
-    res.status(500).json({ message: error.message })
+    res.status(INTERNAL_SERVER_ERROR).json({ message: error.message })
   }
 }
