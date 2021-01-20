@@ -1,6 +1,6 @@
 import { users } from '../models'
 import { OK, CREATED, INTERNAL_SERVER_ERROR } from '../constants/http-status'
-import { RECORD_CREATED, RECORD_UPDATED, RECORD_DELETE } from '../constants/response-message'
+import { RECORD_CREATED, RECORD_UPDATED, RECORD_DELETED } from '../constants/response-message'
 
 // Get all users
 exports.list = async (req, res) => {
@@ -53,7 +53,7 @@ exports.delete = async (req, res) => {
     const { id } = req.params
     await users.destroy({ where: { id } })
 
-    return res.status(OK).json({ message: RECORD_DELETE })
+    return res.status(OK).json({ message: RECORD_DELETED })
   } catch (error) {
     res.status(INTERNAL_SERVER_ERROR).json({ message: error.message })
   }
